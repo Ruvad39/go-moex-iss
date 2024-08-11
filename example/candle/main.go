@@ -25,7 +25,7 @@ func main() {
 	//).Do()
 	// candles, err := service.Do()
 
-	// пример: получим интервал через парсинг
+	// пример: получим интервал через парсинг строки
 	// M1 M10 H1 D1 W1 MN1 Q1
 	interval, err := iss.ParseInterval("D1")
 	if err != nil {
@@ -36,7 +36,7 @@ func main() {
 	// по акциям
 	candles, err := client.GetStockCandles("SBER", interval, "2024-05-01", "2025-01-01")
 	// по фючерсам
-	//candles, err := client.GetFortsCandles("SiU4", interval, "2024-08-09", "2025-01-01")
+	//candles, err := client.GetFortsCandles("SiU4", iss.Interval_M1, "2024-08-09  23:00:00", "2025-01-01")
 	if err != nil {
 		slog.Error("main", "ошибка GetCandles", err.Error())
 		return
