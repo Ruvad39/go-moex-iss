@@ -19,18 +19,18 @@ type StockInfo struct {
 	BoardName           string  `json:"BOARDNAME"`           // Режим торгов
 	Decimals            int     `json:"DECIMALS"`            // Точность
 	SecName             string  `json:"SECNAME"`             // Наименование
-	Remarks             string  `json:"REMARKS"`             //"10" Примечание
+	Remarks             string  `json:"REMARKS"`             // Примечание
 	MarketCode          string  `json:"MARKETCODE"`          // Рынок, Идентификатор рынка на котором торгуется финансовый инструмент
 	InstrID             string  `json:"INSTRID"`             // Группа инструментов
-	SectorID            string  `json:"SectorID"`            //"13" Сектор (Устарело)"
+	SectorID            string  `json:"SectorID"`            // Сектор (Устарело)"
 	MinStep             float64 `json:"MINSTEP"`             // Мин. шаг цены
 	PrevWaPrice         float64 `json:"PREVWAPRICE"`         // Значение оценки (WAPRICE) предыдущего торгового дня
 	FaceUnit            string  `json:"FACEUNIT"`            // Код валюты, в которой выражен номинал ценной бумаги
 	PrevDate            string  `json:"PREVDATE"`            // Дата предыдущего торгового дня
 	IssueSize           int     `json:"ISSUESIZE"`           // Объем выпуска
 	ISIN                string  `json:"ISIN"`                // Международный идентификационный код ценной бумаги
-	LatName             string  `json:"LATNAME"`             //" Наименование финансового инструмента на английском языке
-	RegNumber           string  `json:"REGNUMBER"`           //"21" "Регистрационный номер
+	LatName             string  `json:"LATNAME"`             // Наименование финансового инструмента на английском языке
+	RegNumber           string  `json:"REGNUMBER"`           // Регистрационный номер
 	PrevLegalClosePrice float64 `json:"PREVLEGALCLOSEPRICE"` // Официальная цена закрытия предыдущего дня, рассчитываемая по методике ФСФР
 	CurrencyID          string  `json:"CURRENCYID"`          // Валюта расчетов
 	SecType             string  `json:"SECTYPE"`             // Тип ценной бумаги
@@ -48,7 +48,7 @@ type StockData struct {
 	Offer                          float64 `json:"OFFER"`                          // Лучшая котировка на продажу
 	OfferDepth                     string  `json:"OFFERDEPTH"`                     // Лотов на продажу по лучшей  = null
 	Spread                         float64 `json:"SPREAD"`                         // Разница между лучшей котировкой на продажу и покупку (спред), руб
-	BidDeptht                      int     `json:"biddeptht"`                      // объем всех заявок на покупку в очереди Торговой Системы, выраженный в лотах
+	BidDeptht                      int     `json:"BIDDEPTHT"`                      // объем всех заявок на покупку в очереди Торговой Системы, выраженный в лотах
 	OfferDeptht                    int     `json:"OFFERDEPTHT"`                    // Объем всех заявок на продажу в очереди Торговой Системы, выраженный в лотах
 	Open                           float64 `json:"OPEN"`                           // Цена первой сделки
 	Low                            float64 `json:"LOW"`                            // Минимальная цена сделки

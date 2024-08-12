@@ -24,7 +24,7 @@ type FortsInfo struct {
 	AssetCode        string  `json:"ASSETCODE"`        // Код базового актива
 	PrevOpenPosition int     `json:"PREVOPENPOSITION"` // Открытые позиции предыдущего дня, контр.
 	LotVolume        int     `json:"LOTVOLUME"`        // К-во единиц базового актива в инструменте
-	InitialMargin    float64 `json:"INITIALMARGIN"`    // К-во единиц базового актива в инструменте
+	InitialMargin    float64 `json:"INITIALMARGIN"`    // Гарантийное обеспечение на первом уровне лимита концентрации
 	HighLimit        float64 `json:"HIGHLIMIT"`        // Верхний лимит
 	LowLimit         float64 `json:"LOWLIMIT"`         // Нижний лимит
 	StepPrice        float64 `json:"STEPPRICE"`        // Стоимость шага цены

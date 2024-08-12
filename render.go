@@ -87,6 +87,7 @@ func unmarshalOne(row []interface{}, namePos map[string]int, vv reflect.Value, t
 		}
 		val := row[pos]
 		field := vv.Field(i)
+		//slog.Info(" unmarshalOne ", "pos", pos, slog.Any("val", val), slog.Any("field", field), "valRv.Kind()", field.Kind())
 
 		switch field.Kind() {
 		case reflect.Float64, reflect.Float32:

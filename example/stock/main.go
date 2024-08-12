@@ -13,7 +13,7 @@ func main() {
 	//iss.SetLogLevel(slog.LevelDebug)
 
 	// получить список акций
-	Sec, err := client.GetStockInfo("")
+	Sec, err := client.GetStockInfo("MOEX")
 	//Sec, err := client.GetStockInfo("SBER,MOEX")
 	if err != nil {
 		slog.Error("main", "ошибка GetStockInfo", err.Error())
@@ -27,17 +27,17 @@ func main() {
 	}
 
 	// текущие рыночные данные
-	SecData, err := client.GetStockData("SBER,ROSN,MOEX")
-	if err != nil {
-		slog.Error("main", "ошибка GetStockData", err.Error())
-	}
-
-	slog.Info("GetStockData", slog.Int("всего len(Sec)", len(SecData)))
-	for row, sec := range SecData {
-
-		slog.Info(strconv.Itoa(row),
-			"SecData", sec,
-		)
-
-	}
+	//SecData, err := client.GetStockData("SBER,ROSN,MOEX")
+	//if err != nil {
+	//	slog.Error("main", "ошибка GetStockData", err.Error())
+	//}
+	//
+	//slog.Info("GetStockData", slog.Int("всего len(Sec)", len(SecData)))
+	//for row, sec := range SecData {
+	//
+	//	slog.Info(strconv.Itoa(row),
+	//		"SecData", sec,
+	//	)
+	//
+	//}
 }
