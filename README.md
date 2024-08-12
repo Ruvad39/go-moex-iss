@@ -46,8 +46,16 @@ Ticker.Candles(interval int, from, to string) (Candles, error)
 // Нужна аторизация
 Ticker.OrderBook() (OrderBook, error)
 
-// TODO другие данные algopack https://moexalgo.github.io
+// algopack 
 
+// GetFutOIAll Открытые позиции физ. и юр. лиц по всем инструментам
+// date = за указанную дату; latest =1 возвращает последнюю пятиминутку за указанную дату
+GetFutOIAll(date string, latest int) ([]FutOI, error)
+// GetFutOI данные по заданному тикеру
+// ticker = Краткий код базового актива (Si, RI, GD, ...); from = Дата начала периода; to = Дата окончания периода; флаг latest=1 возвращает последнюю пятиминутку за указанный период
+GetFutOI(ticker string, from, to string, latest int) ([]FutOI, error)
+
+// TODO другие данные algopack https://moexalgo.github.io
 ```
 
 ## Примеры
