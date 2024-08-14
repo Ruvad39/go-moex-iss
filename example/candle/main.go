@@ -34,7 +34,7 @@ func main() {
 	}
 
 	// по акциям
-	candles, err := client.GetStockCandles("SBER", interval, "2024-05-01", "2025-01-01")
+	candles, err := client.GetStockCandles("SBER", interval, "2024-08-01", "2025-01-01")
 	// по фючерсам
 	//candles, err := client.GetFortsCandles("SiU4", iss.Interval_M1, "2024-08-09  23:00:00", "2025-01-01")
 	if err != nil {

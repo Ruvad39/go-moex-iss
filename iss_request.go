@@ -35,6 +35,7 @@ type IssRequest struct {
 	jsonFull bool   // iss.json=compact|extended сокращенный или  расширенный  формат json;
 	dateFrom string // дата from
 	dateTo   string // дата till
+	date     string // дата date
 	interval int    // Интервал свечек
 	start    int    // start =
 	q        string // Поиск инструмента по части Кода, Названию, ISIN, Идентификатору Эмитента, Номеру гос.регистрации.
@@ -101,6 +102,10 @@ func (u *IssRequest) URL() string {
 	if u.jsonFull {
 		//iss.json=compact|extended
 		q.Set("iss.json", "extended")
+	}
+	// нет проверки на формат даты
+	if u.date != "" {
+		q.Set("date", u.date)
 	}
 	// нет проверки на формат даты
 	if u.dateFrom != "" {
@@ -223,23 +228,23 @@ func (u *IssRequest) Json() *IssRequest {
 	return u
 }
 
-// Xml проставим формат данных: xml
-func (u *IssRequest) Xml() *IssRequest {
-	u.format = "xml"
-	return u
-}
-
-// формат данных: csv
-func (u *IssRequest) Csv() *IssRequest {
-	u.format = "csv"
-	return u
-}
-
-// формат данных: html
-func (u *IssRequest) Html() *IssRequest {
-	u.format = "html"
-	return u
-}
+//// Xml проставим формат данных: xml
+//func (u *IssRequest) Xml() *IssRequest {
+//	u.format = "xml"
+//	return u
+//}
+//
+//// формат данных: csv
+//func (u *IssRequest) Csv() *IssRequest {
+//	u.format = "csv"
+//	return u
+//}
+//
+//// формат данных: html
+//func (u *IssRequest) Html() *IssRequest {
+//	u.format = "html"
+//	return u
+//}
 
 // MetaData включать или нет метаинформацию перечень,
 // тип данных и размер полей (столбцов или атрибутов xml)
@@ -294,6 +299,12 @@ func (u *IssRequest) From(param string) *IssRequest {
 // To нет проверки на формат даты
 func (u *IssRequest) To(param string) *IssRequest {
 	u.dateTo = param
+	return u
+}
+
+// Date нет проверки на формат даты
+func (u *IssRequest) Date(param string) *IssRequest {
+	u.date = param
 	return u
 }
 

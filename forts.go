@@ -57,8 +57,8 @@ type FortsData struct {
 	SettleTopRevSettle    float64 `json:"SETTLETOPREVSETTLE"`    // Изменение текущей расчетной цены
 	NumTrades             int     `json:"NUMTRADES"`             // Количество совершенных сделок, штук
 	VolToDay              int64   `json:"VOLTODAY"`              // Объем совершенных сделок, контрактов
-	ValToDay              int64   `json:"VALTODAY"`              // Объем совершенных сделок, рублей
-	ValToDay_USD          int64   `json:"VALTODAY_USD"`          // Объем совершенных сделок, дол. США
+	ValToDay              float64 `json:"VALTODAY"`              // Объем совершенных сделок, рублей
+	ValToDay_USD          float64 `json:"VALTODAY_USD"`          // Объем совершенных сделок, дол. США
 	UpdateTime            string  `json:"UPDATETIME"`            // Время последнего обновления
 	LastChangePrcnt       float64 `json:"LASTCHANGEPRCNT"`       // Изменение цены последней сделки к предыдущей, %"
 	BidDepth              int     `json:"BIDDEPTH"`              // Объем заявок на покупку по лучшей котировке, выраженный в лотах null
@@ -73,7 +73,7 @@ type FortsData struct {
 	SysTime               string  `json:"SYSTIME"`               // Время загрузки данных системой
 	TradeDate             string  `json:"TRADEDATE"`             // Дата последней сделки
 	LastToPrevPrice       float64 `json:"LASTTOPREVPRICE"`       // Изменение цены последней сделки к последней цене предыдущего дня, %
-	OpenPosition          float64 `json:"OPENPOSITION"`          // Открытые позиции, контрактов
+	OpenPosition          int64   `json:"OPENPOSITION"`          // Открытые позиции, контрактов
 	OiChange              int64   `json:"OICHANGE"`              // Изменение открытых позиций к предыдущему закрытию, контр.
 	OpenPeriodPrice       float64 `json:"OPENPERIODPRICE"`       // Цена аукциона открытия
 	SwapRate              float64 `json:"SWAPRATE"`              // Фандинг в рублях (величина SwapRate, согласно спецификации контракта)

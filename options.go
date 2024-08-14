@@ -1,6 +1,7 @@
 package iss
 
 import (
+	"errors"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -58,10 +59,10 @@ type OptionData struct {
 	LastChange            float64 `json:"LASTCHANGE"`            // Изменение цены последней сделки к предыдущей цене
 	SettlePrice           float64 `json:"SETTLEPRICE"`           // Текущая расчетная цена
 	SettleToPrevSettle    float64 `json:"SETTLETOPREVSETTLE"`    // Изменение текущей расчетной цены
-	NumTrades             int     `json:"NUMTRADES"`             // Количество совершенных сделок, штук
+	NumTrades             int64   `json:"NUMTRADES"`             // Количество совершенных сделок, штук
 	VolToDay              int64   `json:"VOLTODAY"`              // Объем совершенных сделок, контрактов
-	ValToDay              int64   `json:"VALTODAY"`              // Объем совершенных сделок, рублей
-	ValToDay_USD          int64   `json:"VALTODAY_USD"`          // Объем совершенных сделок, дол. США
+	ValToDay              float64 `json:"VALTODAY"`              // Объем совершенных сделок, рублей
+	ValToDay_USD          float64 `json:"VALTODAY_USD"`          // Объем совершенных сделок, дол. США
 	UpdateTime            string  `json:"UPDATETIME"`            // Время последнего обновления
 	LastChangePrcnt       float64 `json:"LASTCHANGEPRCNT"`       // Изменение цены последней сделки к предыдущей, %"
 	BidDepth              int     `json:"BIDDEPTH"`              // Объем заявок на покупку по лучшей котировке, выраженный в лотах null
@@ -75,7 +76,27 @@ type OptionData struct {
 	SeqNum                int64   `json:"SEQNUM"`                // Номер обновления (служебное поле)
 	SysTime               string  `json:"SYSTIME"`               // Время загрузки данных системой
 	OiChange              int64   `json:"OICHANGE"`              // Изменение открытых позиций к предыдущему закрытию, контр.
-	OpenPosition          float64 `json:"OPENPOSITION"`          // Открытые позиции, контрактов
+	OpenPosition          int64   `json:"OPENPOSITION"`          // Открытые позиции, контрактов
+}
+
+type OptionHistory struct {
+	TradeDate         string  `json:"TRADEDATE"`         // 	Дата за которую предоставляются данные
+	SecID             string  `json:"SECID"`             // Уникальный краткий код инструмента
+	BoardID           string  `json:"BOARDID"`           // Идентификатор режима торгов
+	Open              float64 `json:"OPEN"`              // Цена открытия
+	Low               float64 `json:"LOW"`               // Минимальная цена сделки
+	High              float64 `json:"HIGH"`              // Максимальная цена сделки
+	Close             float64 `json:"CLOSE"`             // Цена последней сделки
+	Value             float64 `json:"VALUE"`             // Оборот в рублях
+	Volume            int64   `json:"VOLUME"`            // Оборот в контрактах
+	OpenPositionValue float64 `json:"OPENPOSITIONVALUE"` // Объем открытых позиций, руб.
+	OpenPosition      int64   `json:"OPENPOSITION"`      // Открытые позиции в контрактах
+	SettlePrice       float64 `json:"SETTLEPRICE"`       // Расчетная цена текущего дня
+	WфPrice           float64 `json:"WAPRICE"`           // Средневзвешенная цена (рыночные сделки)
+	SettlePriceDay    float64 `json:"SETTLEPRICEDAY"`    // Теоретическая цена в дневном клиринге (пункты)
+	Change            float64 `json:"CHANGE"`            // Изменение цены последней сделки по отношению к цене последней сделки предыдущего торгового, %
+	QTY               int64   `json:"QTY"`               // Объем последней сделки, контрактов
+	NumTrades         int64   `json:"NUMTRADES"`         // 	Количество сделок
 }
 
 // GetOptionInfo получить параметры инструментов по опционам
@@ -128,6 +149,94 @@ func (c *Client) GetOptionData(symbols string) ([]OptionData, error) {
 		slog.Error(op+".Unmarshal", "err", err.Error())
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
+
+	return result, nil
+}
+
+// GetOptionHistory получить исторические данные по одному символу
+func (c *Client) GetOptionHistory(symbols string, from, to string) ([]OptionHistory, error) {
+	return c.NewOptionHistoryService(symbols, from, to, "").Do()
+}
+
+// GetOptionHistoryAllDate получить исторические данные по всем символам за заданную дату
+func (c *Client) GetOptionHistoryAllDate(date string) ([]OptionHistory, error) {
+	return c.NewOptionHistoryService("", "", "", date).Do()
+}
+
+// OptionHistoryService сервис для получения исторических данных
+type OptionHistoryService struct {
+	client     *Client
+	issRequest *IssRequest
+}
+
+// параметры должны быть
+// или symbol + from + to = данные по одному символу
+// или  date = данные по всем символам за определенную дату
+func (c *Client) NewOptionHistoryService(symbol string, from, to string, date string) *OptionHistoryService {
+	iss := NewIssRequest().History().Options().WithSecurities(true).Json().MetaData(false).Target(symbol).From(from).To(to).Date(date)
+
+	return &OptionHistoryService{
+		client:     c,
+		issRequest: iss,
+	}
+}
+
+// Do выполняет выгрузку History
+func (s *OptionHistoryService) Do() ([]OptionHistory, error) {
+	const op = "OptionHistoryService.Do"
+
+	result := make([]OptionHistory, 0)
+	count := 1
+	for {
+		// "fetch candles: item(s) processed"
+		s.client.log.Debug(op, "запрос истории: номер запроса", count)
+
+		t_result, err := s.Next()
+		if err != nil {
+			if errors.Is(err, EOF) {
+				break
+			}
+			return result, fmt.Errorf("%s: %w", op, err)
+		}
+		result = append(result, t_result...)
+		count++
+
+	}
+
+	return result, nil
+}
+
+func (s *OptionHistoryService) Next() ([]OptionHistory, error) {
+	var err error
+	const op = "OptionHistoryService.Next"
+
+	r := &request{
+		method:  http.MethodGet,
+		fullURL: s.issRequest.URL(),
+	}
+
+	var resp Response
+	err = s.client.getJSON(r, &resp)
+	if err != nil {
+		slog.Error(op+".getJSON", "err", err.Error())
+		return nil, fmt.Errorf("%s: %w", op, err)
+	}
+
+	result := make([]OptionHistory, 0, len(resp.History.Data))
+	err = Unmarshal(resp.History.Columns, resp.History.Data, &result)
+	if err != nil {
+		slog.Error(op+".Unmarshal", "err", err.Error())
+		return nil, fmt.Errorf("%s: %w", op, err)
+	}
+	// TODO поменять на константу (не равную 0. а к примеру 10)
+	if len(result) == 0 {
+		return nil, EOF
+	}
+	s.client.log.Debug(op, "len(result)", len(result))
+
+	// увеличим параметр start на кол-во полученных данных
+	s.issRequest.start += len(result)
+	s.client.log.Debug(op, "s.issRequest.start", s.issRequest.start)
 
 	return result, nil
 }

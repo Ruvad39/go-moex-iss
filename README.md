@@ -33,6 +33,10 @@ GetFortsCandles(symbols string, interval int, from, to string) (Candles, error)
 GetOptionInfo(symbols string) ([]OptionInfo, error)
 // GetOptionData получить рыночные данные по опционам
 GetOptionData(symbols string) ([]OptionData, error)
+// GetOptionHistory получить исторические данные по одному символу
+GetOptionHistory(symbols string, from, to string) ([]OptionHistory, error)
+// GetOptionHistoryAllDate получить исторические данные по всем символам за заданную дату
+GetOptionHistoryAllDate(date string) ([]OptionHistory, error)
 
 // GetTicker поиск тикера по коду
 GetTicker(symbol string) (*Ticker, error)

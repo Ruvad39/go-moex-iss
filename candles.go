@@ -192,13 +192,17 @@ func (s *CandlesService) Next() ([]Candle, error) {
 		slog.Error(op+".Unmarshal", "err", err.Error())
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
-
+	// TODO поменять на константу (не равную 0. а к примеру 10)
 	if len(result) == 0 {
 		return nil, EOF
 	}
-	s.client.log.Debug(op, "len(result)", len(result), "mindate", result[0].Begin,
-		"maxdate", result[len(result)-1].Begin)
+	s.client.log.Debug(op,
+		"len(result)", len(result),
+		"mindate", result[0].Begin,
+		"maxdate", result[len(result)-1].Begin,
+	)
 
+	// увеличим параметр start на кол-во полученных данных
 	s.issRequest.start += len(result)
 	s.client.log.Debug(op, "s.issRequest.start", s.issRequest.start)
 

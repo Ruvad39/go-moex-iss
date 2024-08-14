@@ -30,4 +30,8 @@ type Response struct {
 		Columns []string        `json:"columns"`
 		Data    [][]interface{} `json:"data"`
 	} `json:"orderbook"`
+	History struct {
+		Columns []string        `json:"columns"`
+		Data    [][]interface{} `json:"data"`
+	} `json:"history"`
 }
