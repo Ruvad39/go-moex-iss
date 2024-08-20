@@ -44,11 +44,11 @@ type Client struct {
 	micexPassportCert string
 }
 
-func NewClient(opts ...ClientOption) (error, *Client) {
+func NewClient(opts ...ClientOption) (*Client, error) {
 	var err error
 	jar, err := cookiejar.New(nil)
 	if err != nil {
-		return err, nil
+		return nil, err
 	}
 	//logLevel.Set(slog.LevelDebug) // по умолчанию проставим debug
 
@@ -68,7 +68,7 @@ func NewClient(opts ...ClientOption) (error, *Client) {
 	if client.userName != "" && client.password != "" {
 		err = client.Connect()
 	}
-	return err, client
+	return client, err
 }
 
 // callAPI запрос к http серверу

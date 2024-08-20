@@ -12,7 +12,7 @@ func main() {
 	// получить данные по стакану можно только с авторизацией
 	user := ""
 	pwd := ""
-	err, client := iss.NewClient(iss.WithUser(user), iss.WithPwd(pwd))
+	client, err := iss.NewClient(iss.WithUser(user), iss.WithPwd(pwd))
 	if err != nil {
 		slog.Error("main", "NewClient", err.Error())
 	}

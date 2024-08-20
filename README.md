@@ -70,7 +70,7 @@ GetFutOI(ticker string, from, to string, latest int) ([]FutOI, error)
 // и не доступны некоторые сервисы algopack
 user := ""
 pwd := ""
-err, client := iss.NewClient(iss.WithUser(user), iss.WithPwd(pwd))
+client, err := iss.NewClient(iss.WithUser(user), iss.WithPwd(pwd))
 //err, client := iss.NewClient()
 if err != nil {
     slog.Error("main", "NewClient", err.Error())
@@ -79,7 +79,7 @@ if err != nil {
 ### Данные по акциям
 
 ```go
-err, client := iss.NewClient()
+client, _ := iss.NewClient()
 if err != nil {
     slog.Error("main", "NewClient", err.Error())
 }

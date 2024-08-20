@@ -9,7 +9,7 @@ import (
 func main() {
 
 	// создание клиента
-	_, client := iss.NewClient()
+	client, _ := iss.NewClient()
 	//iss.SetLogLevel(slog.LevelDebug)
 
 	// получить список акций

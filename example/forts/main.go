@@ -9,7 +9,7 @@ import (
 
 func main() {
 	// создание клиента
-	err, client := iss.NewClient()
+	client, err := iss.NewClient()
 	if err != nil {
 		slog.Error("main", "NewClient", err.Error())
 	}
@@ -24,12 +24,11 @@ func main() {
 
 	slog.Info("GetFortsInfo", slog.Int("всего len(Sec)", len(Sec)))
 	for row, sec := range Sec {
-
 		slog.Info(strconv.Itoa(row),
 			"sec", sec,
 		)
-
 	}
+	//slog.Info("Sec", slog.Any("Sec", Sec))
 
 	// получить по фючерсам рыночные данные
 	SecData, _ := client.GetFortsData("CRU4,MXU4")

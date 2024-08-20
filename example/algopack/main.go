@@ -21,7 +21,7 @@ func main() {
 	// получить некоторые данные можно только с авторизацией
 	user, _ := os.LookupEnv("MOEX_USER")
 	pwd, _ := os.LookupEnv("MOEX_PWD")
-	err, client := iss.NewClient(iss.WithUser(user), iss.WithPwd(pwd))
+	client, err := iss.NewClient(iss.WithUser(user), iss.WithPwd(pwd))
 	if err != nil {
 		slog.Error("main", "NewClient", err.Error())
 	}

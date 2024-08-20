@@ -8,7 +8,7 @@ import (
 
 func main() {
 	// создание клиента
-	err, client := iss.NewClient()
+	client, err := iss.NewClient()
 	if err != nil {
 		slog.Error("main", "NewClient", err.Error())
 	}

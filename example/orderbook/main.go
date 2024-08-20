@@ -10,7 +10,7 @@ func main() {
 	// получить данные можно только с авторизацией
 	user := ""
 	pwd := ""
-	err, client := iss.NewClient(iss.WithUser(user), iss.WithPwd(pwd))
+	client, err := iss.NewClient(iss.WithUser(user), iss.WithPwd(pwd))
 	//err, client := iss.NewClient()
 	if err != nil {
 		slog.Error("main", "NewClient", err.Error())
