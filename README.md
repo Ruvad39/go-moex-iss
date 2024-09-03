@@ -50,7 +50,20 @@ Ticker.Candles(interval int, from, to string) (Candles, error)
 // Нужна аторизация
 Ticker.OrderBook() (OrderBook, error)
 
-// algopack 
+// algopack
+
+//GetStockTradeStats получим данные TradeStats по заданной акции
+GetStockTradeStats(symbol string, from, to string, latest bool) ([]TradeStats, error)(symbol string, from, to string, latest bool) ([]TradeStats, error)
+// GetStockTradeStatsAll получим данные TradeStats по всем акция за заданный день
+GetStockTradeStatsAll(date string, latest bool) ([]TradeStats, error)
+// GetFortsTradeStats получим данные TradeStats по заданному фьючерсу
+GetFortsTradeStats(symbol string, from, to string, latest bool) ([]TradeStats, error)
+// GetStockTradeStatsAll получим данные TradeStats по всем фьючерсам за заданный день
+GetFortsTradeStatsAll(date string, latest bool) ([]TradeStats, error)
+// GetFxTradeStats получим данные TradeStats по заданной валюте
+GetFxTradeStats(symbol string, from, to string, latest bool) ([]TradeStats, error)
+// GetFxTradeStatsAll получим данные TradeStats по всем валютам за заданный день
+GetFxTradeStatsAll(date string, latest bool) ([]TradeStats, error)
 
 // GetFutOIAll Открытые позиции физ. и юр. лиц по всем инструментам
 // date = за указанную дату; latest =1 возвращает последнюю пятиминутку за указанную дату
@@ -189,7 +202,36 @@ fmt.Println(orderBook.String())
 
 
 ```
+### Super Candles TradeStats
 
+```go
+// обязательно нужна авторизация
+user, _ := "os.LookupEnv("MOEX_USER")
+pwd, _ := ""
+
+client, err := iss.NewClient(iss.WithUser(user), iss.WithPwd(pwd))
+if err != nil {
+	slog.Error("main", "NewClient", err.Error())
+}
+
+stats, err := client.GetStockTradeStats("SBER", "2024-09-01", "2024-09-03", false)
+//stats, err := client.GetStockTradeStatsAll("2024-09-03", false)
+//stats, err := client.GetFortsTradeStats("SiU4", "2024-09-01", "2024-09-03", false)
+//stats, err := client.GetFortsTradeStatsAll("2024-09-03", false)
+//stats, err := client.GetFxTradeStatsAll("2024-09-03", false)
+
+if err != nil {
+slog.Error("main", "ошибка GetTradeStats", err.Error())
+}
+
+// цикл по списку свечей
+for row, candle := range stats {
+    slog.Info(strconv.Itoa(row),
+        "stats", candle,
+    )
+}
+
+```
 
 ### Другие примеры смотрите [тут](/example)
 

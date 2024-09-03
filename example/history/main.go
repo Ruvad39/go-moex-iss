@@ -15,13 +15,13 @@ func main() {
 	iss.SetLogLevel(slog.LevelDebug)
 
 	// по одному символу
-	//history, err := client.GetOptionHistory("GD2300BU4", "2024-01-01", "")
+	history, err := client.GetOptionHistory("Si88000BH4E", "2024-08-22", "")
 	//if err != nil {
 	//	slog.Error("main", "ошибкаGetOptionHistory", err.Error())
 	//	return
 	//}
 
-	history, err := client.GetOptionHistoryAllDate("2024-08-01")
+	//history, err := client.GetOptionHistoryAllDate("2024-08-01")
 	if err != nil {
 		slog.Error("main", "ошибка GetOptionHistory", err.Error())
 		return

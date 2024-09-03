@@ -34,4 +34,8 @@ type Response struct {
 		Columns []string        `json:"columns"`
 		Data    [][]interface{} `json:"data"`
 	} `json:"history"`
+	Data struct {
+		Columns []string        `json:"columns"`
+		Data    [][]interface{} `json:"data"`
+	} `json:"data"`
 }

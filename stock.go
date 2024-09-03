@@ -35,7 +35,7 @@ type StockInfo struct {
 	CurrencyID          string  `json:"CURRENCYID"`          // Валюта расчетов
 	SecType             string  `json:"SECTYPE"`             // Тип ценной бумаги
 	LisTLevel           int     `json:"LISTLEVEL"`           // Уровень листинга
-	SettLEDate          string  `json:"SETTLEDATE"`          // Дата расчетов сделки
+	SettLeDate          string  `json:"SETTLEDATE"`          // Дата расчетов сделки
 }
 
 // StockData рыночные данные по акциям
@@ -119,6 +119,8 @@ func (c *Client) GetStockInfo(symbols string) ([]StockInfo, error) {
 
 	result := make([]StockInfo, 0, len(resp.Securities.Data))
 	err = Unmarshal(resp.Securities.Columns, resp.Securities.Data, &result)
+	//err = UnmarshalCSV(resp.Securities.Columns, resp.Securities.Data, &result, DefaultTagKey)
+
 	if err != nil {
 		slog.Error(op+".Unmarshal", "err", err.Error())
 		return nil, fmt.Errorf("%s: %w", op, err)

@@ -80,7 +80,7 @@ type OptionData struct {
 }
 
 type OptionHistory struct {
-	TradeDate         string  `json:"TRADEDATE"`         // 	Дата за которую предоставляются данные
+	TradeDate         string  `json:"TRADEDATE"`         // Дата за которую предоставляются данные
 	SecID             string  `json:"SECID"`             // Уникальный краткий код инструмента
 	BoardID           string  `json:"BOARDID"`           // Идентификатор режима торгов
 	Open              float64 `json:"OPEN"`              // Цена открытия
@@ -92,7 +92,7 @@ type OptionHistory struct {
 	OpenPositionValue float64 `json:"OPENPOSITIONVALUE"` // Объем открытых позиций, руб.
 	OpenPosition      int64   `json:"OPENPOSITION"`      // Открытые позиции в контрактах
 	SettlePrice       float64 `json:"SETTLEPRICE"`       // Расчетная цена текущего дня
-	WфPrice           float64 `json:"WAPRICE"`           // Средневзвешенная цена (рыночные сделки)
+	WapPrice          float64 `json:"WAPRICE"`           // Средневзвешенная цена (рыночные сделки)
 	SettlePriceDay    float64 `json:"SETTLEPRICEDAY"`    // Теоретическая цена в дневном клиринге (пункты)
 	Change            float64 `json:"CHANGE"`            // Изменение цены последней сделки по отношению к цене последней сделки предыдущего торгового, %
 	QTY               int64   `json:"QTY"`               // Объем последней сделки, контрактов

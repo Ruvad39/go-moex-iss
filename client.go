@@ -13,10 +13,11 @@ import (
 )
 
 const (
-	libraryName    = "MOEX ISS"
-	libraryVersion = "v0.0.1"
-	DefaultApiURL  = "https://iss.moex.com/iss/"
-	DefaultAuthURL = "https://passport.moex.com/authenticate"
+	libraryName     = "MOEX ISS"
+	libraryVersion  = "v0.0.1"
+	DefaultApiURL   = "https://iss.moex.com/iss/"
+	DefaultAuthURL  = "https://passport.moex.com/authenticate"
+	DefaultAlgoPack = "/datashop/algopack"
 )
 
 const (
@@ -110,8 +111,8 @@ func (c *Client) callAPI(r *request) (data []byte, err error) {
 		return nil, err
 	}
 
-	//c.log.Debug("callAPI", "status code", resp.StatusCode, "body", string(data))
-	c.log.Debug("callAPI", "resp.Header", resp.Header)
+	c.log.Debug("callAPI", "status code", resp.StatusCode, "body", string(data))
+	//c.log.Debug("callAPI", "resp.Header", resp.Header)
 	if resp.StatusCode >= http.StatusBadRequest {
 		c.log.Error("callAPI", "Error response body", resp.StatusCode, slog.Any("data", data))
 	}

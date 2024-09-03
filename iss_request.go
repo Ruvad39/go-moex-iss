@@ -11,6 +11,10 @@ const (
 	FortsBoard   = "RFUD" // фьючерсы
 	StockBoard   = "TQBR" // акция
 	OptionsBoard = "ROPD" // опционы
+
+	AlgoPackStock = "eq" // акции
+	AlgoPackForts = "fo" // фьючерсы
+	AlgoPackFx    = "fx" // валюта
 )
 
 var (
@@ -29,17 +33,22 @@ type IssRequest struct {
 	target     string //
 	format     string // формат данных json xml csv
 	// параметры запроса
-	symbols  string // список инструментов для строки запроса
-	iss_only string // iss.only=block1,block2 = ответ может содержать несколько блоков данных и этот
-	metadata bool   // iss.meta=on|off  = включать или нет метаинформацию
-	jsonFull bool   // iss.json=compact|extended сокращенный или  расширенный  формат json;
-	dateFrom string // дата from
-	dateTo   string // дата till
-	date     string // дата date
-	interval int    // Интервал свечек
-	start    int    // start =
-	q        string // Поиск инструмента по части Кода, Названию, ISIN, Идентификатору Эмитента, Номеру гос.регистрации.
-
+	symbols         string // список инструментов для строки запроса
+	iss_only        string // iss.only=block1,block2 = ответ может содержать несколько блоков данных и этот
+	metadata        bool   // iss.meta=on|off  = включать или нет метаинформацию
+	jsonFull        bool   // iss.json=compact|extended сокращенный или  расширенный  формат json;
+	dateFrom        string // дата from
+	dateTo          string // дата till
+	date            string // дата date
+	interval        int    // Интервал свечек
+	start           int    // start =
+	q               string // Поиск инструмента по части Кода, Названию, ISIN, Идентификатору Эмитента, Номеру гос.регистрации.
+	algoPack        string // тип данных алгопака
+	algoPackMarkets string // рынок для  алгопака eq = акции fo = фьючерсы	fx = валюта
+	latest          bool   // Super Candles флаг latest=1 возвращает последнюю пятиминутку за указанную дату
+	algoPackStock   bool   //
+	algoPackForts   bool   //
+	algoPackFx      bool   //
 }
 
 func NewIssRequest() *IssRequest {
@@ -59,6 +68,24 @@ func (u *IssRequest) URL() string {
 		return ""
 	}
 
+	if u.algoPack != "" {
+		_url.Path = path.Join(_url.Path, DefaultAlgoPack)
+		// выберем рынок
+		if u.algoPackMarkets != "" {
+			_url.Path = path.Join(_url.Path, u.algoPackMarkets)
+		}
+		if u.algoPackStock {
+			_url.Path = path.Join(_url.Path, AlgoPackStock)
+		}
+		if u.algoPackForts {
+			_url.Path = path.Join(_url.Path, AlgoPackForts)
+		}
+		if u.algoPackFx {
+			_url.Path = path.Join(_url.Path, AlgoPackFx)
+		}
+		// что выбираем
+		_url.Path = path.Join(_url.Path, u.algoPack)
+	}
 	if u.history {
 		_url.Path = path.Join(_url.Path, "history")
 	}
@@ -124,6 +151,9 @@ func (u *IssRequest) URL() string {
 	// если не пустой список инструментов
 	if u.symbols != "" && u.target != "candles" {
 		q.Set("securities", u.symbols)
+	}
+	if u.latest {
+		q.Set("latest", "1")
 	}
 	// // если не пустой список колонок
 	// //q.Set("securities.columns",  params.columns)
@@ -323,5 +353,38 @@ func (u *IssRequest) Symbol(param string) *IssRequest {
 // Interval
 func (u *IssRequest) Interval(param int) *IssRequest {
 	u.interval = param
+	return u
+}
+
+// что выбираем из алгопака
+func (u *IssRequest) AlgoPack(param string) *IssRequest {
+	u.algoPack = param
+	return u
+}
+
+// какой рынок в алгопаке
+func (u *IssRequest) AlgoPackMarkets(param string) *IssRequest {
+	u.algoPackMarkets = param
+	return u
+}
+
+// флаг latest=1 возвращает последнюю пятиминутку за указанный период
+func (u *IssRequest) Latest(param bool) *IssRequest {
+	u.latest = param
+	return u
+}
+
+func (u *IssRequest) AlgoPackStock(param bool) *IssRequest {
+	u.algoPackStock = param
+	return u
+}
+
+func (u *IssRequest) AlgoPackForts(param bool) *IssRequest {
+	u.algoPackForts = param
+	return u
+}
+
+func (u *IssRequest) AlgoPackFx(param bool) *IssRequest {
+	u.algoPackFx = param
 	return u
 }

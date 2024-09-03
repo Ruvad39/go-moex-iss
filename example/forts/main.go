@@ -13,10 +13,10 @@ func main() {
 	if err != nil {
 		slog.Error("main", "NewClient", err.Error())
 	}
-	iss.SetLogLevel(slog.LevelDebug)
+	//iss.SetLogLevel(slog.LevelDebug)
 
 	// получить список фьчерсов
-	Sec, err := client.GetFortsInfo("SiU4,MXU4")
+	Sec, err := client.GetFortsInfo("SiU4,RiU4")
 	//Sec, err := client.GetFortsInfo("")
 	if err != nil {
 		slog.Error("main", "ошибка GetFortsInfo", err.Error())

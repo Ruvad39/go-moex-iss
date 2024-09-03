@@ -186,7 +186,7 @@ func (s *CandlesService) Next() ([]Candle, error) {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
 
-	result := make([]Candle, 0, len(resp.OrderBook.Data))
+	result := make([]Candle, 0, len(resp.Candles.Data))
 	err = Unmarshal(resp.Candles.Columns, resp.Candles.Data, &result)
 	if err != nil {
 		slog.Error(op+".Unmarshal", "err", err.Error())
