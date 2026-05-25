@@ -2,19 +2,22 @@ package iss
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log/slog"
+	"net"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
 	"os"
+	"time"
 )
 
 const (
 	libraryName     = "MOEX ISS"
-	libraryVersion  = "v0.0.1"
+	libraryVersion  = "v0.1.0"
 	DefaultApiURL   = "https://iss.moex.com/iss/"
 	DefaultAuthURL  = "https://passport.moex.com/authenticate"
 	DefaultAlgoPack = "/datashop/algopack"
@@ -24,6 +27,8 @@ const (
 	autCookiesName = "MicexPassportCert"
 	autHeaderName  = "X-MicexPassport-Marker"
 )
+
+var defaultHTTPTimeout = time.Second * 10
 
 var logLevel = &slog.LevelVar{} // INFO
 
@@ -47,16 +52,9 @@ type Client struct {
 
 func NewClient(opts ...ClientOption) (*Client, error) {
 	var err error
-	jar, err := cookiejar.New(nil)
-	if err != nil {
-		return nil, err
-	}
-	//logLevel.Set(slog.LevelDebug) // по умолчанию проставим debug
 
 	client := &Client{
-		httpClient: &http.Client{
-			Jar: jar,
-		},
+		httpClient: DefaultHTTPClient(),
 		log: slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
 			Level: logLevel,
 		})).With(slog.String("package", "moex-iss")),
@@ -86,7 +84,7 @@ func (c *Client) callAPI(r *request) (data []byte, err error) {
 	req = req.WithContext(ctx)
 	req.Header = r.header
 
-	c.log.Debug("callAPI", slog.Any("request", req))
+	//c.log.Debug("callAPI", slog.Any("request", req))
 
 	//req.SetBasicAuth(c.userName, c.password)
 	resp, err := c.httpClient.Do(req)
@@ -205,6 +203,31 @@ func (c *Client) Connect() error {
 	return nil
 }
 
+// DefaultHTTPClient создадим и вернем  стандартный  http.Client
+func DefaultHTTPClient() HTTPClient {
+	var dialer = &net.Dialer{
+		Timeout:   30 * time.Second,
+		KeepAlive: 30 * time.Second,
+	}
+	var defaultTransport = &http.Transport{
+		Proxy:                 http.ProxyFromEnvironment,
+		DialContext:           dialer.DialContext,
+		MaxIdleConns:          100,
+		MaxConnsPerHost:       100,
+		MaxIdleConnsPerHost:   100,
+		ExpectContinueTimeout: 0,
+		ForceAttemptHTTP2:     true,
+		TLSClientConfig:       &tls.Config{},
+	}
+	var jar, _ = cookiejar.New(nil)
+	var defaultHttpClient = &http.Client{
+		Timeout:   defaultHTTPTimeout,
+		Transport: defaultTransport,
+		Jar:       jar,
+	}
+	return defaultHttpClient
+}
+
 // ClientOption установка параметров клиента
 type ClientOption func(c *Client)
 
@@ -227,4 +250,17 @@ func WithPwd(pwd string) ClientOption {
 	return func(client *Client) {
 		client.password = pwd
 	}
+}
+
+// WithTimeout установить значение Timeout для http.Client
+// по умолчанию стоит 10s
+func WithTimeout(valie time.Duration) ClientOption {
+	return func(client *Client) {
+		defaultHTTPTimeout = valie
+	}
+}
+
+// WithHttpClient установить httpClient
+func WithHttpClient(client HTTPClient) ClientOption {
+	return func(c *Client) { c.httpClient = client }
 }
