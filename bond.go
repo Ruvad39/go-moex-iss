@@ -18,7 +18,7 @@ type BondInfo struct {
 	ShortName             string  `json:"SHORTNAME"`             // Кратк. наим.
 	SecName               string  `json:"SECNAME"`               // Наименование финансового инструмента
 	PrevWaPrice           float64 `json:"PREVWAPPRICE"`          // Средневзвешенная цена предыдущего дня, % к номиналу
-	YielDatPrevWaPrice    float64 `json:"YIELDATPREVWAPPRICE"`   // Доходность по оценке пред. дня
+	YielDatPrevWaPrice    float64 `json:"YIELDATPREVWAPRICE"`    // Доходность по оценке пред. дня
 	CouponValue           float64 `json:"COUPONVALUE"`           // Сумма купона, в валюте номинала
 	NextCoupon            string  `json:"NEXTCOUPON"`            // Дата окончания купона
 	MatDate               string  `json:"MATDATE"`               // Дата погашения
