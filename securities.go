@@ -35,9 +35,9 @@ https://iss.moex.com/iss/securities/SBER.json?iss.meta=off&iss.only=description&
 данные по фьючу
 https://iss.moex.com/iss/securities/SRH5.json?iss.json=extended
 выбор по названию а не по коду
-https://iss.moex.com/iss/securities/Si-3.25.json?iss.json=extended&shortname=1
+https://iss.moex.com/iss/securities/Si-6.26.json?iss.json=extended&shortname=1
 
-https://iss.moex.com/iss/securities/SRH5.json?iss.meta=off&iss.only=description&description.columns=name,title,value
+https://iss.moex.com/iss/securities/SRM6.json?iss.meta=off&iss.only=description&description.columns=name,title,value
 
 	["SECID", "Краткий код", "SRH5"],
 	["NAME", "Наименование серии инструмента", "Фьючерсный контракт SBRF-3.25"],
@@ -172,14 +172,13 @@ type Securities struct {
 }
 */
 
-// GetTicker поиск тикера
-// func (c *Client) NewTicker(symbol string, opts ...TickerOption) (*Ticker, error) {
+// GetTickersAll список всех инструментов
 func (c *Client) GetTickersAll() ([]Ticker, error) {
 
 	var err error
 	const op = "GetTickersAl"
 	url := NewIssRequest().Target("securities").Json().MetaData(false).OnlySecurities().URL()
-
+	slog.Debug("GetTickersAll", "url", url)
 	r := &request{
 		method:  http.MethodGet,
 		fullURL: url,

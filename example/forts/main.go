@@ -16,8 +16,9 @@ func main() {
 	iss.SetLogLevel(slog.LevelDebug)
 
 	// получить список фьчерсов
-	Sec, err := client.GetFortsInfo("SiU4,RiU4")
+	Sec, err := client.GetFortsInfo("MNM6,RiM6")
 	//Sec, err := client.GetFortsInfo("MMU4")
+	//Sec, err := client.GetFortsInfo("SRZ5")
 	if err != nil {
 		slog.Error("main", "ошибка GetFortsInfo", err.Error())
 	}
@@ -28,7 +29,7 @@ func main() {
 			"sec", sec,
 		)
 	}
-	//slog.Info("Sec", slog.Any("Sec", Sec))
+	slog.Info("Sec", slog.Any("Sec", Sec))
 
 	// получить по фючерсам рыночные данные
 	// SecData, _ := client.GetFortsData("CRU4,MXU4")

@@ -35,10 +35,10 @@ func main() {
 	}
 
 	// по акциям
-	//candles, err := client.GetStockCandles("SBER", interval, "2024-11-20", "2024-11-20")
+	candles, err := client.GetStockCandles("SBER", interval, "2025-03-05", "2025-03-05")
 	// по фючерсам
 	//candles, err := client.GetFortsCandles("SZU4", interval, "2024-11-20 11:00:00", "2024-11-21")
-	candles, err := client.GetFortsCandles("SRZ4", interval, "2024-11-20 12:00:00", "2024-11-21")
+	//candles, err := client.GetFortsCandles("SRZ4", interval, "2024-11-20 12:00:00", "2024-11-21")
 	if err != nil {
 		slog.Error("main", "ошибка GetCandles", err.Error())
 		return

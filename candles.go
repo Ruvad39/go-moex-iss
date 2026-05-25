@@ -196,6 +196,7 @@ func (s *CandlesService) Next() ([]Candle, error) {
 	if len(result) == 0 {
 		return nil, EOF
 	}
+
 	s.client.log.Debug(op,
 		"len(result)", len(result),
 		"mindate", result[0].Begin,
